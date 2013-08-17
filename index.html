@@ -1,18 +1,32 @@
-<DOCTYPE! HTML>
+<html>
 <head>
   <title>D3 Watchout!</title>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <style type="text/css" src ="style.css"></style>
 </head>
+<body>
 
 
-<script src="collider.js"></script>
+<!-- <svg width="700" height="450"></svg>
+ -->
+<script>
+
+var gameBoard = d3.select('body').append('svg:svg')
+  .attr("width",700)
+  .attr("height", 450);
+
+var enemies = [{x:10, y:20}, {x:10, y:20}, {x:10, y:20}];
+
+gameBoard.append("circle");
+
+gameBoard.selectAll("circle").data(enemies).enter().append("circle").attr("r",15)
+  .attr("cx",Math.random()*700)
+  .attr("cy",Math.random()*450);
 
 
 
+</script>
 
+</body>
 
-<svg width="700" height="450"></svg>
-
-
-
+</html>
