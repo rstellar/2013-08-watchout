@@ -15,14 +15,35 @@ var gameBoard = d3.select('body').append('svg:svg')
   .attr("width",700)
   .attr("height", 450);
 
-var enemies = [{x:10, y:20}, {x:10, y:20}, {x:10, y:20}];
+var enemies = [{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0}];
+
+var randomizer = function(array){
+  for (var i = 0; i < array.length; i++) {
+    array[i].x = Math.random()*700;
+    array[i].y = Math.random()*450;
+  };
+  return array;
+};
+
+
 
 gameBoard.append("circle");
 
-gameBoard.selectAll("circle").data(enemies).enter().append("circle").attr("r",15)
-  .attr("cx",Math.random()*700)
-  .attr("cy",Math.random()*450);
+gameBoard.selectAll("circle").data(randomizer(enemies)).enter().append("circle").attr("r",12)
+  .style("fill","steelblue")
+  .attr("cx",function(d){return d.x;})
+  .attr("cy",function(d){return d.y;});
 
+var redraw = function(){
+  gameBoard.selectAll("circle").data(randomizer(enemies)).transition().duration(300).attr("r",14)
+  .style("fill","steelblue")
+  .attr("cx",function(d){return d.x;})
+  .attr("cy",function(d){return d.y;});
+  console.log("Yo dude...");
+}
+
+
+setInterval(function(){redraw(), console.log("It's sorta working...");}, 500);
 
 
 </script>
