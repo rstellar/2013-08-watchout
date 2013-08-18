@@ -5,17 +5,15 @@
 <style type="text/css" src ="style.css"></style>
 </head>
 <body>
-
-
-<!-- <svg width="700" height="450"></svg>
- -->
 <script>
 
-
+var height = 450;
+var width = 700;
+var radius = 10;
 
 var gameBoard = d3.select('body').append('svg:svg')
-  .attr("width",700)
-  .attr("height", 450);
+  .attr("width",width)
+  .attr("height", height);
 
 var enemies = [{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0},{x:0, y:0}];
 
@@ -29,55 +27,60 @@ colorMe = function(color) {
   return function () { this.style("fill",c)};
 }
 
-var randomizer = function(array){
+var newEnemyPositions = function(array){
   for (var i = 0; i < array.length; i++) {
-    array[i].x = Math.random()*700;
-    array[i].y = Math.random()*450;
+    array[i].x = Math.random()*height;
+    array[i].y = Math.random()*width;
   };
   return array;
 };
 
 var updateEnemy = function(){
   gameBoard
-  .selectAll("circle.enemy")
-  .data(randomizer(enemies))
-  .enter()
-  .append("circle")
-  .attr("class","enemy")
-  .call(colorMe("steelblue"))
-  .call(coordinates);
+    .selectAll("circle.enemy")
+    .data(newEnemyPositions(enemies))
+    .enter()
+    .append("circle")
+    .attr("class","enemy")
+    .call(colorMe("steelblue"))
+    .call(coordinates);
 
   gameBoard
     .selectAll("circle.enemy")
-    .data(randomizer(enemies))
+    .data(newEnemyPositions(enemies))
     .transition()
-    .duration(500)
+    .duration(1000)
     .attr("r",10)
     .call(coordinates);
 }
 
-var Hero = function(){
+var dragmove= function (d) {
+  d3.select(this)
+      .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
+      .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
+}
 
+var drag = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", dragmove);
+
+var Hero = function(){
   gameBoard
   .selectAll("circle.hero")
-  .data([{x:350, y:225}])
+  .data([{x:width/2, y:height/2, z:'hi'}])
   .enter()
   .append("circle")
   .attr("class","hero")
   .call(colorMe("orange"))
-  .attr("r",11)
+  .attr("r",radius)
   .call(coordinates)
-  .drag.on("click");
-
-  console.log("...where is the hero?")
+  .call(drag);
 }
 
 Hero();
-setInterval(function(){updateEnemy();}, 500);
+setInterval(function(){updateEnemy();}, 1000);
 
 
 </script>
-
 </body>
-
 </html>
